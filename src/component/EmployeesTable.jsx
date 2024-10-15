@@ -22,7 +22,7 @@ const EmployeesTable = ({ employees, onViewDetails }) => {
 
   return (
     <div className="w-full rounded-lg">
-      <div className="overflow-y-auto max-h-80">
+      <div className="overflow-y-auto min-h-[64.9vh] max-h-[65vh]">
         <table className="w-full text-sm text-left text-gray-500 table-fixed">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
