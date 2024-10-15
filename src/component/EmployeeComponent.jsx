@@ -28,7 +28,7 @@ const EmployeeComponent = () => {
   );
 
   return (
-    <div className="w-[90%] h-[97vh] bg-white rounded-lg m-2 px-8 py-4 flex flex-col gap-8">
+    <div className="w-[98%] h-[97vh] border-[0.25px] border-gray-300 bg-white rounded-lg m-2 px-8 py-4 flex flex-col gap-8">
       {/* heading section */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col items-start gap-2">
