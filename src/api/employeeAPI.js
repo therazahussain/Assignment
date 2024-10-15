@@ -21,12 +21,7 @@ function EmployeesApis() {
     }
   };
 
-  const addEmployees = async (
-    data,
-    setLoading,
-    setError,
-    setEmployees
-  ) => {
+  const addEmployees = async (data, setLoading, setError, setEmployees) => {
     try {
       setLoading(true); // Start loading
       const apiResponse = await axios({
@@ -37,8 +32,7 @@ function EmployeesApis() {
       });
 
       // Assuming 'newEmployee' is the object you want to add
-  setEmployees((prevEmployees) => [...prevEmployees, apiResponse.data]);
-
+      setEmployees((prevEmployees) => [...prevEmployees, apiResponse.data]);
 
       setLoading(false); // Stop loading
     } catch (error) {
@@ -54,7 +48,56 @@ function EmployeesApis() {
     }
   };
 
-  return { fetchEmployees, addEmployees };
+  const fetchEmployeeDetails = async (id, setLoadingData, setEmployee) => {
+    try {
+      const apiResponse = await axios.get(`${API_URL}/employees/${id}`);
+      setEmployee(apiResponse.data);
+      setLoadingData(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Axios-specific error
+        console.error("Axios error:", error.response?.data || error.message);
+      } else {
+        // General error
+        console.error("Unexpected error:", error);
+      }
+      setLoadingData(false);
+      setEmployee(null);
+    }
+  };
+
+  const deleteEmployee = async (id, setLoadingButton, setEmployees, setIsDeleting, onClose, setLoadingEmployees) => {
+    try {
+      setLoadingButton(true); // Start loading
+      const apiResponse = await axios({
+        method: "DELETE",
+        baseURL: API_URL,
+        url: `/employees/${id}`,
+      });
+
+      // Assuming 'newEmployee' is the object you want to add
+
+      setLoadingButton(false); // Stop loading
+      setIsDeleting(false) 
+      onClose()
+      setLoadingEmployees(true);
+      setTimeout(()=>{
+      fetchEmployees(setEmployees, setLoadingEmployees);
+      },[1000])
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Axios-specific error
+        console.error("Axios error:", error.response?.data || error.message);
+      } else {
+        // General error
+        console.error("Unexpected error:", error);
+      }
+      setLoadingButton(false);
+    }
+  };
+  
+
+  return { fetchEmployees, addEmployees, fetchEmployeeDetails, deleteEmployee };
 }
 
 export default EmployeesApis;

@@ -18,7 +18,7 @@ const EmployeeComponent = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormVisible, setFormVisible] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // New state for selected employee
+  const [selectedEmployeeId , setSelectedEmployeeId] = useState(null); // New state for selected employee
 
   const filteredEmployees = employees.filter(
     (employee) =>
@@ -31,11 +31,11 @@ const EmployeeComponent = () => {
   };
 
   const handleViewDetails = (employee) => {
-    setSelectedEmployee(employee); // Set the selected employee
+    setSelectedEmployeeId(employee); // Set the selected employee
   };
 
   const handleCloseDetails = () => {
-    setSelectedEmployee(null); // Close the detail modal
+    setSelectedEmployeeId(null); // Close the detail modal
   };
 
   return (
@@ -101,10 +101,12 @@ const EmployeeComponent = () => {
         )}
 
         {/* Show the EmployeeDetailModal if an employee is selected */}
-        {selectedEmployee && (
+        {selectedEmployeeId && (
           <EmployeeDetailModal
-            employee={selectedEmployee}
+            id={selectedEmployeeId}
             onClose={handleCloseDetails} // Close details modal
+            setEmployees={setEmployees}
+            setLoadingEmployees={setLoadingEmployees}
           />
         )}
       </div>

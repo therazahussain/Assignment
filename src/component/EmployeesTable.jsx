@@ -20,6 +20,8 @@ const EmployeesTable = ({ employees, onViewDetails }) => {
     setCurrentPage(pageNumber);
   };
 
+  console.log(employees);
+
   return (
     <div className="w-full rounded-lg">
       <div className="overflow-y-auto min-h-[64.9vh] max-h-[65vh]">
@@ -51,7 +53,7 @@ const EmployeesTable = ({ employees, onViewDetails }) => {
                 <td className="px-6 py-4">{employee.position}</td>
                 <td className="px-6 py-4">
                   <button
-                    onClick={() => onViewDetails(employee)}
+                    onClick={() => onViewDetails(employee.id)}
                     className="flex font-medium items-center justify-center text-white bg-black px-4 py-2 text-sm rounded-lg cursor-pointer gap-2"
                   >
                     More Details
