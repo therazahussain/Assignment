@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
-import SearchBar from './SearchBar';
-import { FaPlus } from 'react-icons/fa';
-import EmployeesTable from './EmployeesTable';
-import EmployeeForm from './EmployeeForm';
-import EmployeeDetailModal from './EmployeeDetailModal'; // Import the new modal
+import React, { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
+import { FaPlus } from "react-icons/fa";
+import EmployeesTable from "./EmployeesTable";
+import EmployeeForm from "./EmployeeForm";
+import EmployeeDetailModal from "./EmployeeDetailModal"; // Import the new modal
+import EmployeesApis from "../api/employeeAPI";
+import LoadingSvg from "./LoadingSvg";
 
 const EmployeeComponent = () => {
-  const [employees, setEmployees] = useState([
-    { name: 'Raza Hussain Rizvi', position: 'Full Stack Developer', department: 'Engineering', email: 'raza@example.com', phoneNumber: '123-456-7890' },
-    { name: 'John Doe', position: 'Frontend Developer', department: 'Engineering', email: 'john@example.com', phoneNumber: '123-456-7891' },
-    { name: 'Jane Smith', position: 'Backend Developer', department: 'Engineering', email: 'jane@example.com', phoneNumber: '123-456-7892' },
-    { name: 'Michael Johnson', position: 'UI/UX Designer', department: 'Design', email: 'michael@example.com', phoneNumber: '123-456-7893' },
-    { name: 'Sarah Wilson', position: 'Data Scientist', department: 'Data', email: 'sarah@example.com', phoneNumber: '123-456-7894' },
-    { name: 'James Brown', position: 'DevOps Engineer', department: 'IT', email: 'james@example.com', phoneNumber: '123-456-7895' },
-    { name: 'Chris Martin', position: 'QA Engineer', department: 'Quality Assurance', email: 'chris@example.com', phoneNumber: '123-456-7896' },
-    { name: 'Elena Gilbert', position: 'Product Manager', department: 'Product', email: 'elena@example.com', phoneNumber: '123-456-7897' },
-    { name: 'Mark Ruffalo', position: 'System Administrator', department: 'IT', email: 'mark@example.com', phoneNumber: '123-456-7898' },
-    { name: 'Bruce Wayne', position: 'Security Analyst', department: 'Security', email: 'bruce@example.com', phoneNumber: '123-456-7899' },
-  ]);
+  const { fetchEmployees } = EmployeesApis();
+  const [employees, setEmployees] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(true);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
+    fetchEmployees(setEmployees, setLoadingEmployees);
+  }, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
   const [isFormVisible, setFormVisible] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null); // New state for selected employee
 
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    employee.position.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEmployees = employees.filter(
+    (employee) =>
+      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.position.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleAddEmployee = (newEmployee) => {
@@ -46,7 +44,9 @@ const EmployeeComponent = () => {
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col items-start gap-2">
           <h2 className="text-2xl font-bold">Employee Management</h2>
-          <p className="text-sm text-gray-500 font-medium">Manage your Employees and their accounts</p>
+          <p className="text-sm text-gray-500 font-medium">
+            Manage your Employees and their accounts
+          </p>
         </div>
 
         <div className="flex items-center justify-center font-medium flex-col">
@@ -78,20 +78,31 @@ const EmployeeComponent = () => {
         </div>
 
         {/* Pass filtered employees data to EmployeesTable */}
-        <EmployeesTable employees={filteredEmployees} onViewDetails={handleViewDetails} />
+        {loadingEmployees ? (
+          <LoadingSvg />
+        ) : employees.length > 0 ? (
+          <EmployeesTable
+            employees={filteredEmployees}
+            onViewDetails={handleViewDetails}
+          />
+        ) : (
+          <div className="flex items-center justify-center font-semibold mt-4">
+            No Employees Found
+          </div>
+        )}
 
         {/* Show the EmployeeForm as a modal if isFormVisible is true */}
         {isFormVisible && (
-          <EmployeeForm 
-            onAddEmployee={handleAddEmployee} 
+          <EmployeeForm
+            onAddEmployee={handleAddEmployee}
             onClose={() => setFormVisible(false)} // Close form on cancellation
           />
         )}
 
         {/* Show the EmployeeDetailModal if an employee is selected */}
         {selectedEmployee && (
-          <EmployeeDetailModal 
-            employee={selectedEmployee} 
+          <EmployeeDetailModal
+            employee={selectedEmployee}
             onClose={handleCloseDetails} // Close details modal
           />
         )}
