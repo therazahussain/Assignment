@@ -93,11 +93,12 @@ const EmployeeDetailModal = ({
         {isUpdating && (
           <UpdateEmployeeForm
             employee={employee}
-            onUpdate={(updatedEmployee) => {
-              onUpdate(updatedEmployee); // Call the parent update function
-              setIsUpdating(false); // Close the update form after updating
-            }}
-            onClose={() => setIsUpdating(false)} // Close the update form
+            id={id}
+            setEmployees={setEmployees}
+            setIsUpdating={setIsUpdating} // Close the update form
+            setLoadingEmployees={setLoadingEmployees}
+            setEmployee={setEmployee}
+            setLoadingData = {setLoadingData}
           />
         )}
 

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import LoadingButtonSVG from './LoadingButtonSVG';
+import EmployeesApis from '../api/employeeAPI';
 
-const UpdateEmployeeForm = ({ employee, onUpdate, onClose }) => {
+const UpdateEmployeeForm = ({ id, employee, setEmployees, setIsUpdating, setLoadingEmployees, setEmployee,
+  setLoadingData }) => {
+  const {updateEmployeeDetails} = EmployeesApis();
   const [name, setName] = useState('');
   const [position, setPosition] = useState('');
   const [department, setDepartment] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [loadingButton, setLoadingButton] = useState(false);
 
   // Pre-fill the form with the employee's current details when the component mounts
   useEffect(() => {
@@ -14,22 +19,23 @@ const UpdateEmployeeForm = ({ employee, onUpdate, onClose }) => {
       setPosition(employee.position);
       setDepartment(employee.department);
       setEmail(employee.email);
-      setPhoneNumber(employee.phoneNumber);
+      setPhoneNumber(employee.phone);
     }
   }, [employee]);
 
   const handleSubmit = (e) => {
+    setLoadingButton(true);
     e.preventDefault();
-    const updatedEmployee = {
+    const data = {
       ...employee,
       name,
       position,
       department,
       email,
-      phoneNumber,
+      phone: phoneNumber,
     };
-    onUpdate(updatedEmployee); // Call the update function with the new details
-    onClose(); // Close the modal after updating
+    updateEmployeeDetails(id, data, setLoadingButton, setEmployees, setIsUpdating, setLoadingEmployees, setEmployee,
+      setLoadingData)
   };
 
   return (
@@ -80,14 +86,17 @@ const UpdateEmployeeForm = ({ employee, onUpdate, onClose }) => {
           <button
             type="button"
             className=" border-[1.5px] border-black px-2 py-1 rounded bg-black text-white transition"
+            onClick={handleSubmit}
+            disabled={loadingButton}
           >
-            Update Employee
+            {loadingButton ? <LoadingButtonSVG /> : "Update Employee"}
           </button>
           <button
             type="button"
-            onClick={onClose}
+            onClick={()=> setIsUpdating(false)}
             className="bg-white text-red-500 border-[1.5px] border-red-500 px-2 py-1 rounded hover:bg-red-500 hover:text-white transition"
-          >
+            disabled={loadingButton}
+         >
             Close
           </button>
         </form>
