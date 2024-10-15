@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import EmployeesApis from "../api/employeeAPI";
+import LoadingButtonSVG from "./LoadingButtonSVG";
 
-const EmployeeForm = ({ onAddEmployee, onClose }) => {
-  const [name, setName] = useState('');
-  const [position, setPosition] = useState('');
-  const [department, setDepartment] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+const EmployeeForm = ({ onAddEmployee, onClose, setEmployees }) => {
+  const { addEmployees } = EmployeesApis();
+
+  const [name, setName] = useState("");
+  const [position, setPosition] = useState("");
+  const [department, setDepartment] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
 
     // Validate phone number length
     if (phoneNumber.length !== 10) {
-      alert('Phone number must be exactly 10 digits.');
+      alert("Phone number must be exactly 10 digits.");
       return;
     }
 
@@ -21,15 +28,17 @@ const EmployeeForm = ({ onAddEmployee, onClose }) => {
       position,
       department,
       email,
-      phoneNumber,
+      phone: phoneNumber,
     };
-    onAddEmployee(newEmployee);
-    setName('');
-    setPosition('');
-    setDepartment('');
-    setEmail('');
-    setPhoneNumber('');
-    onClose(); 
+    addEmployees(newEmployee, setLoading, setError, setEmployees);
+    if (!loading &&  !error) {
+      setName("");
+      setPosition("");
+      setDepartment("");
+      setEmail("");
+      setPhoneNumber("");
+      onClose();
+    }
   };
 
   return (
@@ -75,7 +84,7 @@ const EmployeeForm = ({ onAddEmployee, onClose }) => {
             value={phoneNumber}
             onChange={(e) => {
               // Allow only numbers and restrict length to 10
-              const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+              const value = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
               setPhoneNumber(value);
             }}
             required
@@ -85,13 +94,16 @@ const EmployeeForm = ({ onAddEmployee, onClose }) => {
           <button
             type="submit"
             className="mt-4 bg-black text-white p-2 rounded border-[1.5px] border-black hover:bg-white hover:border-black hover:border-[1.5px] hover:text-black transition"
+            disabled={loading}
           >
-            Add Employee
+            {loading ? <LoadingButtonSVG /> : "Add Employee"}
+            
           </button>
           <button
             type="button"
             onClick={onClose}
             className="mt-2 text-red-500 hover:underline"
+            disabled={loading}
           >
             Cancel
           </button>

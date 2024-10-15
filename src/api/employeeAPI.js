@@ -6,7 +6,6 @@ function EmployeesApis() {
   const fetchEmployees = async (setEmployees, setLoadingEmployees) => {
     try {
       const apiResponse = await axios.get(`${API_URL}/employees`);
-      console.log(apiResponse);
       setEmployees(apiResponse.data);
       setLoadingEmployees(false);
     } catch (error) {
@@ -22,11 +21,26 @@ function EmployeesApis() {
     }
   };
 
-
-  const addEmployees = async (data, setLoadingButton) => {
+  const addEmployees = async (
+    data,
+    setLoading,
+    setError,
+    setEmployees
+  ) => {
     try {
-      const apiResponse = await axios.get(`${API_URL}/employees`);
-      console.log(apiResponse);
+      setLoading(true); // Start loading
+      const apiResponse = await axios({
+        method: "POST",
+        baseURL: API_URL,
+        url: "/employees",
+        data,
+      });
+
+      // Assuming 'newEmployee' is the object you want to add
+  setEmployees((prevEmployees) => [...prevEmployees, apiResponse.data]);
+
+
+      setLoading(false); // Stop loading
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // Axios-specific error
@@ -35,6 +49,8 @@ function EmployeesApis() {
         // General error
         console.error("Unexpected error:", error);
       }
+      setLoading(false);
+      setError(true);
     }
   };
 

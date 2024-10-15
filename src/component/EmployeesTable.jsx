@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const EmployeesTable = ({ employees, onViewDetails }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const employeesPerPage = 5;
+  const employeesPerPage = 10;
 
   // Calculate the indices for the current page
   const indexOfLastEmployee = currentPage * employeesPerPage;

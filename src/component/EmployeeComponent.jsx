@@ -96,6 +96,7 @@ const EmployeeComponent = () => {
           <EmployeeForm
             onAddEmployee={handleAddEmployee}
             onClose={() => setFormVisible(false)} // Close form on cancellation
+            setEmployees={setEmployees}   
           />
         )}
 
