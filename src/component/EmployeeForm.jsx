@@ -93,7 +93,7 @@ const EmployeeForm = ({ onAddEmployee, onClose, setEmployees }) => {
           />
           <button
             type="submit"
-            className="mt-4 bg-black text-white p-2 rounded border-[1.5px] border-black hover:bg-white hover:border-black hover:border-[1.5px] hover:text-black transition"
+            className="mt-4 bg-black text-white p-2 rounded border-[1.5px] border-black transition-all duration-300 hover:bg-white hover:border-black hover:border-[1.5px] hover:text-black"
             disabled={loading}
           >
             {loading ? <LoadingButtonSVG /> : "Add Employee"}
@@ -102,7 +102,7 @@ const EmployeeForm = ({ onAddEmployee, onClose, setEmployees }) => {
           <button
             type="button"
             onClick={onClose}
-            className="mt-2 text-red-500 hover:underline"
+            className="mt-2 text-red-500 bg-white border-[1.5px] border-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 p-2"
             disabled={loading}
           >
             Cancel
