@@ -18,7 +18,7 @@ const EmployeeComponent = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormVisible, setFormVisible] = useState(false);
-  const [selectedEmployeeId , setSelectedEmployeeId] = useState(null); // New state for selected employee
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null); // New state for selected employee
 
   const filteredEmployees = employees.filter(
     (employee) =>
@@ -39,27 +39,29 @@ const EmployeeComponent = () => {
   };
 
   return (
-    <div className="w-[90%] h-[97vh] bg-white rounded-lg m-2 px-8 py-4 flex flex-col gap-8 relative">
+    <div className="w-full h-full bg-white rounded-lg m-2 p-4 flex flex-col gap-4 relative">
       {/* heading section */}
-      <div className="w-full flex items-center justify-between">
-        <div className="flex flex-col items-start gap-2">
-          <h2 className="text-2xl font-bold">Employee Management</h2>
-          <p className="text-sm text-gray-500 font-medium">
-            Manage your Employees and their accounts
-          </p>
-        </div>
+      <div className="flex flex-col h-[30%] sm:h-[35%]">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start gap-2">
+            <h2 className="text-2xl font-bold">Employee Management</h2>
+            <p className="text-sm text-gray-500 font-medium">
+              Manage your Employees and their accounts
+            </p>
+          </div>
 
-        <div className="flex items-center justify-center font-medium flex-col">
-          <div className="rounded-full h-10 w-10 bg-blue-400 text-white font-semibold flex items-center justify-center">
-            AD
+          <div className="flex items-center justify-center font-medium flex-col">
+            <div className="rounded-full h-10 w-10 bg-blue-400 text-white font-semibold flex items-center justify-center">
+              AD
+            </div>
           </div>
         </div>
       </div>
 
       {/* Employee Content */}
-      <div className="w-full flex flex-col gap-4">
+      <div className="flex flex-col h-[70%] sm:h-[65%] w-full">
         {/* Employees heading */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex font-bold text-base gap-2">
             <h2>All Employees</h2>
             <span className="text-gray-500">({filteredEmployees.length})</span>
@@ -68,7 +70,7 @@ const EmployeeComponent = () => {
           <div className="flex items-center gap-4">
             <SearchBar setSearchQuery={setSearchQuery} />
             <button
-              className="flex font-medium items-center justify-center text-white bg-black px-3 py-3 text-sm rounded-lg cursor-pointer gap-1"
+              className="flex font-medium items-center justify-center text-white bg-black px-3 py-2 text-sm rounded-lg cursor-pointer gap-1"
               onClick={() => setFormVisible(true)} // Show the form when button is clicked
             >
               <FaPlus className="text-white" />
@@ -81,10 +83,12 @@ const EmployeeComponent = () => {
         {loadingEmployees ? (
           <LoadingSvg />
         ) : employees.length > 0 ? (
-          <EmployeesTable
-            employees={filteredEmployees}
-            onViewDetails={handleViewDetails}
-          />
+          <div className="overflow-auto flex-grow">
+            <EmployeesTable
+              employees={filteredEmployees}
+              onViewDetails={handleViewDetails}
+            />
+          </div>
         ) : (
           <div className="flex items-center justify-center font-semibold mt-4">
             No Employees Found
@@ -96,7 +100,7 @@ const EmployeeComponent = () => {
           <EmployeeForm
             onAddEmployee={handleAddEmployee}
             onClose={() => setFormVisible(false)} // Close form on cancellation
-            setEmployees={setEmployees}   
+            setEmployees={setEmployees}
           />
         )}
 
